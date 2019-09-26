@@ -19,16 +19,15 @@ let configureApp (app : IApplicationBuilder) =
 let configureServices (services : IServiceCollection) =
     services.AddGiraffe() |> ignore
 
-let buildWebHost args =
+let getWebHostBuilder args =
     WebHost
         .CreateDefaultBuilder(args)
         .UseKestrel(fun c -> c.AddServerHeader <- false)
         .Configure(Action<IApplicationBuilder> configureApp)
         .ConfigureServices(configureServices)
-        .Build()
 
 [<EntryPoint>]
 let main args =
-    buildWebHost(args).Run()
+    getWebHostBuilder(args).Build().Run()
 
     0

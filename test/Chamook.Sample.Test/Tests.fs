@@ -1,8 +1,14 @@
 module Tests
 
 open System
+open System.Net
 open Xunit
+open Microsoft.AspNetCore.TestHost
+open Swensen.Unquote
+
+let server = new TestServer(Program.getWebHostBuilder [||])
+let client = server.CreateClient()
 
 [<Fact>]
-let ``My test`` () =
-    Assert.True(true)
+let ``health endpoint should return 200`` () =
+    client.GetAsync("/health").Result.StatusCode =! HttpStatusCode.OK
